@@ -12,6 +12,11 @@ autoinstall:
     layout: "de,us"
     variant: "nodeadkeys,"
     toggle: null
+  ssh:
+    install-server: true
+    allow-pw: true
+  drivers:
+    install: true
   snaps:
     - name: spotify
       classic: false
@@ -38,15 +43,32 @@ autoinstall:
       classic: false
     - name: zerotier
       classic: false
-
-
+    - name: joplin
+      classic: false
+    - name: zotero-snap
+      classic: false
 
 
       
   packages:
     - vim
+    - git
+    - htop
+    - python3-pip
   late-commands:
     - curtin in-target -- wget https://repo2.protonvpn.com/debian/dists/stable/main/binary-all/protonvpn-stable-release_1.0.3-3_all.deb
     - curtin in-target -- dpkg -i ./protonvpn-stable-release_1.0.3-3_all.deb
     - curtin in-target -- apt update
     - curtin in-target -- apt install -y proton-vpn-gnome-desktop
+    
+    - curtin in-target --target=/target -- bash -c 'wget -qO - https://hub.unity3d.com/linux/keys/public | gpg --dearmor > /usr/share/keyrings/Unity_Technologies_ApS.gpg'
+    - curtin in-target --target=/target -- bash -c 'echo "deb [signed-by=/usr/share/keyrings/Unity_Technologies_ApS.gpg] https://hub.unity3d.com/linux/repos/deb stable main" > /etc/apt/sources.list.d/unityhub.list'
+
+    
+    
+    - curtin in-target --target=/target -- apt-get update
+    - curtin in-target --target=/target -- apt-get install -y unityhub
+
+
+
+    

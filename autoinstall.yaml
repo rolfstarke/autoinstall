@@ -56,18 +56,50 @@ autoinstall:
     - htop
     - python3-pip
   late-commands:
+    - curtin in-target -- echo "Updating linux"
+    - curtin in-target -- apt update
+    
     - curtin in-target -- wget https://repo2.protonvpn.com/debian/dists/stable/main/binary-all/protonvpn-stable-release_1.0.3-3_all.deb
     - curtin in-target -- dpkg -i ./protonvpn-stable-release_1.0.3-3_all.deb
     - curtin in-target -- apt update
     - curtin in-target -- apt install -y proton-vpn-gnome-desktop
-    
-    - curtin in-target --target=/target -- bash -c 'wget -qO - https://hub.unity3d.com/linux/keys/public | gpg --dearmor > /usr/share/keyrings/Unity_Technologies_ApS.gpg'
-    - curtin in-target --target=/target -- bash -c 'echo "deb [signed-by=/usr/share/keyrings/Unity_Technologies_ApS.gpg] https://hub.unity3d.com/linux/repos/deb stable main" > /etc/apt/sources.list.d/unityhub.list'
 
+    - curtin in-target -- echo "Adding Unity key and repo"   
+    - curtin in-target -- wget -qO - https://hub.unity3d.com/linux/keys/public | gpg --dearmor > /usr/share/keyrings/Unity_Technologies_ApS.gpg
+    - curtin in-target -- echo "deb [signed-by=/usr/share/keyrings/Unity_Technologies_ApS.gpg] https://hub.unity3d.com/linux/repos/deb stable main" > /etc/apt/sources.list.d/unityhub.list
+  
+    - curtin in-target -- echo "Adding Docker's official GPG key and repo"
+    - curtin in-target -- sudo install -m 0755 -d /etc/apt/keyrings
+    - curtin in-target -- curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+    - curtin in-target -- sudo chmod a+r /etc/apt/keyrings/docker.gpg
+    - curtin in-target -- echo "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+    - curtin in-target -- echo" Adding Anydesk keys and repo"
+    - curtin in-target -- curl -fsSL https://keys.anydesk.com/repos/DEB-GPG-KEY|sudo gpg --dearmor -o /usr/share/keyrings/anydesk.gpg
+    - curtin in-target -- echo "deb [signed-by=/usr/share/keyrings/anydesk.gpg] http://deb.anydesk.com/ all main" > sudo /etc/apt/sources.list.d/anydesk-stable.list
+    
+    - curtin in-target -- 
+    - curtin in-target -- 
+    - curtin in-target -- 
+    - curtin in-target -- 
+    - curtin in-target -- 
     
     
-    - curtin in-target --target=/target -- apt-get update
-    - curtin in-target --target=/target -- apt-get install -y unityhub
+    
+    
+    - curtin in-target -- sudo apt-get install docker-ce docker-ce-cli
+    - curtin in-target -- apt-get install -y unityhub
+    - curtin in-target -- apt install anydesk
+    
+    - curtin in-target -- 
+    - curtin in-target -- 
+    - curtin in-target -- 
+    - curtin in-target -- 
+    - curtin in-target -- 
+
+    - curtin in-target -- echo "Updating linux"
+    - curtin in-target -- apt-get update
+
 
 
 

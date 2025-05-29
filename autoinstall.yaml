@@ -1,12 +1,17 @@
 autoinstall:
   version: 1
   identity:
-    hostname: ubuntu-desktop
-    username: local-optimum
-    password: "$6$ZE4WV3QRJhPUnsNv$BpkTBYjUOxOiWV5sNPYDSitTwxW.3NHLmhRqptzpa8a4KTxGpkvMaSDbyq4PVri9kdpD1t7ldUBgwB6uveObg."
+    hostname: legionRS
+    username: freeze
+    password: "2513"
   storage:
     layout:
       name: lvm
+  locale: "en_US.UTF-8"
+  keyboard:
+    layout: "de,us"
+    variant: "nodeadkeys,"
+    toggle: null
   snaps:
     - name: spotify
       classic: false
@@ -16,6 +21,28 @@ autoinstall:
       classic: true
     - name: code
       classic: true
+    - name: android-studio
+      classic: true
+
+    - name: spotify
+      classic: true
+    - name: signal-desktop
+      classic: false
+    - name: thunderbird
+      classic: false
+    - name: obs-studio
+      classic: false
+    - name: vlc
+      classic: false
+    - name: steam
+      classic: false
+    - name: zerotier
+      classic: false
+
+
+
+
+      
   packages:
     - vim
   late-commands:

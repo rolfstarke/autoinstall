@@ -3,13 +3,15 @@
 LOG="$HOME/post_install.log"
 echo "Starting post-install at $(date)" | tee -a "$LOG"
 
-# Snap packages (one per line)
+# APT system update and upgrade – Ausgabe ins Terminal, nur Fehler ins Log
+echo "[APT] Updating and upgrading system"
+sudo apt update -y 2>>"$LOG"
+sudo apt upgrade -y 2>>"$LOG"
+
+# Snap packages (standard confinement)
 snaps=(
   spotify
   telegram-desktop
-  obsidian
-  code
-  android-studio
   signal-desktop
   thunderbird
   obs-studio
@@ -19,12 +21,19 @@ snaps=(
   joplin
   zotero-snap
   zoom-client
-  tor
   brave
 )
 
+# Snap packages requiring --classic
+classic_snaps=(
+  obsidian
+  code
+  android-studio
+)
+
+# Install regular snaps
 for app in "${snaps[@]}"; do
-  if snap list | grep -q "^$app\s"; then
+  if snap list | grep -q "^$app\\s"; then
     echo "[SNAP] $app already installed" | tee -a "$LOG"
   else
     echo "[SNAP] Installing $app" | tee -a "$LOG"
@@ -32,12 +41,19 @@ for app in "${snaps[@]}"; do
   fi
 done
 
-# APT packages (one per line)
-echo "[APT] Updating and upgrading system" | tee -a "$LOG"
-sudo apt update -y 1>/dev/null 2>>"$LOG"
-sudo apt upgrade -y 1>/dev/null 2>>"$LOG"
+# Install classic snaps
+for app in "${classic_snaps[@]}"; do
+  if snap list | grep -q "^$app\\s"; then
+    echo "[SNAP] $app already installed" | tee -a "$LOG"
+  else
+    echo "[SNAP] Installing $app (classic)" | tee -a "$LOG"
+    sudo snap install "$app" --classic 1>/dev/null 2>>"$LOG"
+  fi
+done
 
+# APT packages
 apt_pkgs=(
+  curl
   vim
   git
   htop
@@ -46,7 +62,7 @@ apt_pkgs=(
 )
 
 for pkg in "${apt_pkgs[@]}"; do
-  if dpkg -l | grep -q "^ii\s*$pkg\s"; then
+  if dpkg -l | grep -q "^ii\\s*$pkg\\s"; then
     echo "[APT] $pkg already installed" | tee -a "$LOG"
   else
     echo "[APT] Installing $pkg" | tee -a "$LOG"
@@ -54,7 +70,7 @@ for pkg in "${apt_pkgs[@]}"; do
   fi
 done
 
-# Add qbittorrent PPA and install
+# Add qBittorrent PPA and install
 echo "[REPO] Adding qBittorrent PPA" | tee -a "$LOG"
 sudo add-apt-repository ppa:qbittorrent-team/qbittorrent-stable -y 1>/dev/null 2>>"$LOG"
 sudo apt update -y 1>/dev/null 2>>"$LOG"
@@ -88,7 +104,7 @@ bash ~/miniconda.sh -b 1>/dev/null 2>>"$LOG"
 ~/miniconda3/bin/conda init --all 1>/dev/null 2>>"$LOG"
 rm ~/miniconda.sh
 
-# Cleanup section
+# Cleanup
 echo "[CLEANUP] Removing APT cache and unnecessary packages" | tee -a "$LOG"
 sudo apt autoremove -y 1>/dev/null 2>>"$LOG"
 sudo apt clean 1>/dev/null 2>>"$LOG"

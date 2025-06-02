@@ -47,6 +47,8 @@ autoinstall:
       classic: false
     - name: zotero-snap
       classic: false
+    - name: zoom-client
+      classic: false
 
 
       

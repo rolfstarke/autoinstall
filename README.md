@@ -1,5 +1,7 @@
 to install the post-install.sh
+
 chmod +x ./post-install.sh
+
 ./post-install.sh
 
 

@@ -18,7 +18,8 @@ snaps=(
   vlc
   steam
   zerotier
-  joplin
+  joplin-desktop
+  discord
   zotero-snap
   zoom-client
   brave
@@ -37,7 +38,8 @@ for app in "${snaps[@]}"; do
     echo "[SNAP] $app already installed" | tee -a "$LOG"
   else
     echo "[SNAP] Installing $app" | tee -a "$LOG"
-    sudo snap install "$app" 1>/dev/null 2>>"$LOG"
+    sudo snap install "$app" 2>>"$LOG"
+    systemctl restart snapd
   fi
 done
 
@@ -47,7 +49,8 @@ for app in "${classic_snaps[@]}"; do
     echo "[SNAP] $app already installed" | tee -a "$LOG"
   else
     echo "[SNAP] Installing $app (classic)" | tee -a "$LOG"
-    sudo snap install "$app" --classic 1>/dev/null 2>>"$LOG"
+    sudo snap install "$app" --classic 2>>"$LOG"
+    systemctl restart snapd
   fi
 done
 
@@ -59,6 +62,8 @@ apt_pkgs=(
   htop
   python3-pip
   usb-creator-gtk
+  kdeconnect
+  gedit
 )
 
 for pkg in "${apt_pkgs[@]}"; do
@@ -66,15 +71,15 @@ for pkg in "${apt_pkgs[@]}"; do
     echo "[APT] $pkg already installed" | tee -a "$LOG"
   else
     echo "[APT] Installing $pkg" | tee -a "$LOG"
-    sudo apt install -y "$pkg" 1>/dev/null 2>>"$LOG"
+    sudo apt install -y "$pkg" 2>>"$LOG"
   fi
 done
 
 # Add qBittorrent PPA and install
 echo "[REPO] Adding qBittorrent PPA" | tee -a "$LOG"
-sudo add-apt-repository ppa:qbittorrent-team/qbittorrent-stable -y 1>/dev/null 2>>"$LOG"
-sudo apt update -y 1>/dev/null 2>>"$LOG"
-sudo apt install -y qbittorrent 1>/dev/null 2>>"$LOG"
+sudo add-apt-repository ppa:qbittorrent-team/qbittorrent-stable -y 2>>"$LOG"
+sudo apt update -y 2>>"$LOG"
+sudo apt install -y qbittorrent 2>>"$LOG"
 
 # Unity repo
 echo "[REPO] Adding Unity" | tee -a "$LOG"
@@ -83,7 +88,7 @@ echo "deb [signed-by=/usr/share/keyrings/unity.gpg] https://hub.unity3d.com/linu
 
 # Docker repo
 echo "[REPO] Adding Docker" | tee -a "$LOG"
-sudo install -m 0755 -d /etc/apt/keyrings 1>/dev/null 2>>"$LOG"
+sudo install -m 0755 -d /etc/apt/keyrings 2>>"$LOG"
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor | sudo tee /etc/apt/keyrings/docker.gpg > /dev/null 2>>"$LOG"
 echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo $VERSION_CODENAME) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null 2>>"$LOG"
 
@@ -94,20 +99,20 @@ echo "deb [signed-by=/usr/share/keyrings/anydesk.gpg] http://deb.anydesk.com/ al
 
 # Final update and installs
 echo "[APT] Installing docker-ce, unityhub, anydesk" | tee -a "$LOG"
-sudo apt update -y 1>/dev/null 2>>"$LOG"
-sudo apt install -y docker-ce docker-ce-cli unityhub anydesk 1>/dev/null 2>>"$LOG"
+sudo apt update -y  2>>"$LOG"
+sudo apt install -y docker-ce docker-ce-cli unityhub anydesk 2>>"$LOG"
 
 # Miniconda install
 echo "[INSTALL] Installing Miniconda" | tee -a "$LOG"
 wget -qO ~/miniconda.sh https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh 2>>"$LOG"
-bash ~/miniconda.sh -b 1>/dev/null 2>>"$LOG"
-~/miniconda3/bin/conda init --all 1>/dev/null 2>>"$LOG"
+bash ~/miniconda.sh -b  2>>"$LOG"
+~/miniconda3/bin/conda init --all 2>>"$LOG"
 rm ~/miniconda.sh
 
 # Cleanup
 echo "[CLEANUP] Removing APT cache and unnecessary packages" | tee -a "$LOG"
-sudo apt autoremove -y 1>/dev/null 2>>"$LOG"
-sudo apt clean 1>/dev/null 2>>"$LOG"
+sudo apt autoremove -y  2>>"$LOG"
+sudo apt clean 2>>"$LOG"
 rm -f ~/miniconda.sh >>"$LOG" 2>&1 || true
 
 echo "Post-install complete at $(date)" | tee -a "$LOG"

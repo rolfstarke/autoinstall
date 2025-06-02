@@ -104,12 +104,13 @@ bash ~/miniconda.sh -b 1>/dev/null 2>>"$LOG"
 ~/miniconda3/bin/conda init --all 1>/dev/null 2>>"$LOG"
 rm ~/miniconda.sh
 
+echo "Post-install complete at $(date)" | tee -a "$LOG"
 # Installation of the TP-Link T3U Plus Wifi Adapter
 echo "[INSTALL] Installing T3U Plus" | tee -a "$LOG"
-git clone "https://github.com/RinCat/RTL88x2BU-Linux-Driver.git" /usr/src/rtl88x2bu-git
-sed -i 's/PACKAGE_VERSION="@PKGVER@"/PACKAGE_VERSION="git"/g' /usr/src/rtl88x2bu-git/dkms.conf
-dkms add -m rtl88x2bu -v git
-dkms autoinstall
+sudo git clone "https://github.com/RinCat/RTL88x2BU-Linux-Driver.git" /usr/src/rtl88x2bu-git
+sudo sed -i 's/PACKAGE_VERSION="@PKGVER@"/PACKAGE_VERSION="git"/g' /usr/src/rtl88x2bu-git/dkms.conf
+sudo dkms add -m rtl88x2bu -v git
+sudo dkms autoinstall
 
 # Cleanup
 echo "[CLEANUP] Removing APT cache and unnecessary packages" | tee -a "$LOG"

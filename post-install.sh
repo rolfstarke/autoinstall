@@ -21,6 +21,7 @@ snaps=(
   zoom-client
   tor
   brave
+  steam
 )
 
 for app in "${snaps[@]}"; do

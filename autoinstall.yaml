@@ -55,31 +55,6 @@ autoinstall:
     - python3-pip
     - usb-creator-gtk
     
-  late-commands:
-    - curtin in-target -- echo "Updating linux"
-    - curtin in-target -- apt-get update && apt-get upgrade -y
-
-    - curtin in-target -- echo "Adding Unity key and repo"   
-    - curtin in-target -- bash -c 'wget -qO - https://hub.unity3d.com/linux/keys/public | gpg --dearmor > /usr/share/keyrings/Unity_Technologies_ApS.gpg'
-    - curtin in-target -- bash -c 'echo "deb [signed-by=/usr/share/keyrings/Unity_Technologies_ApS.gpg] https://hub.unity3d.com/linux/repos/deb stable main" > /etc/apt/sources.list.d/unityhub.list'
-
-    - curtin in-target -- echo "Adding Docker's official GPG key and repo"
-    - curtin in-target -- install -m 0755 -d /etc/apt/keyrings
-    - curtin in-target -- bash -c 'curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg'
-    - curtin in-target -- chmod a+r /etc/apt/keyrings/docker.gpg
-    - curtin in-target -- bash -c 'echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo $VERSION_CODENAME) stable" > /etc/apt/sources.list.d/docker.list'
-
-    - curtin in-target -- echo "Adding Anydesk keys and repo"
-    - curtin in-target -- bash -c 'curl -fsSL https://keys.anydesk.com/repos/DEB-GPG-KEY | gpg --dearmor -o /usr/share/keyrings/anydesk.gpg'
-    - curtin in-target -- bash -c 'echo "deb [signed-by=/usr/share/keyrings/anydesk.gpg] http://deb.anydesk.com/ all main" > /etc/apt/sources.list.d/anydesk-stable.list'
-
-    - curtin in-target -- bash -c 'wget -qO ~/miniconda.sh https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh && bash ~/miniconda.sh -b && ~/miniconda3/bin/conda init --all && rm ~/miniconda.sh'
-
-
-    - curtin in-target -- apt-get update
-    - curtin in-target -- apt-get install -y docker-ce docker-ce-cli
-    - curtin in-target -- apt-get install -y unityhub
-    - curtin in-target -- apt-get install -y anydesk
 
 
 

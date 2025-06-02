@@ -53,6 +53,7 @@ autoinstall:
     - git
     - htop
     - python3-pip
+    - usb-creator-gtk
     
   late-commands:
     - curtin in-target -- echo "Updating linux"

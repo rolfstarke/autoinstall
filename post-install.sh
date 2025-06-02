@@ -104,7 +104,6 @@ bash ~/miniconda.sh -b 1>/dev/null 2>>"$LOG"
 ~/miniconda3/bin/conda init --all 1>/dev/null 2>>"$LOG"
 rm ~/miniconda.sh
 
-echo "Post-install complete at $(date)" | tee -a "$LOG"
 # Installation of the TP-Link T3U Plus Wifi Adapter
 echo "[INSTALL] Installing T3U Plus" | tee -a "$LOG"
 sudo git clone "https://github.com/RinCat/RTL88x2BU-Linux-Driver.git" /usr/src/rtl88x2bu-git

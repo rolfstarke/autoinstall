@@ -63,7 +63,7 @@ apt_pkgs=(
   python3-pip
   usb-creator-gtk
   kdeconnect
-  gedit
+  rclone
 )
 
 for pkg in "${apt_pkgs[@]}"; do

@@ -1,0 +1,15 @@
+network:
+  version: 2
+  ethernets:
+    enp66s0:
+      Dhcp4: no
+      addresses:
+        - 141.43.79.151/24
+      routes:
+        - to: default
+          via: 141.43.79.254
+      nameservers:
+        addresses:
+          - 141.43.99.10
+          - 141.43.5.40
+          - 141.43.1.1
